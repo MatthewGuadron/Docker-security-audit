@@ -1,0 +1,359 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "docksec",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/angelamos/docksec",
+          "rules": [
+            {
+              "id": "CIS-2.7",
+              "name": "CIS-2.7",
+              "shortDescription": {
+                "text": "Seccomp not enabled on daemon"
+              },
+              "fullDescription": {
+                "text": "Docker daemon is not configured with seccomp support."
+              },
+              "help": {
+                "text": "Set appropriate ulimits: dockerd --default-ulimit nproc=1024:2048 --default-ulimit nofile=100:200"
+              },
+              "helpUri": "https://docs.docker.com/engine/reference/commandline/dockerd/#default-ulimit-settings",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "docker",
+                  "CIS",
+                  "CIS-2.7"
+                ],
+                "security-severity": "5.0"
+              }
+            },
+            {
+              "id": "CIS-2.14",
+              "name": "CIS-2.14",
+              "shortDescription": {
+                "text": "Ensure Userland Proxy is Disabled"
+              },
+              "fullDescription": {
+                "text": "The userland proxy is slower than hairpin NAT mode and not needed in most environments."
+              },
+              "help": {
+                "text": "Disable userland proxy: dockerd --userland-proxy=false or set userland-proxy: false in daemon.json."
+              },
+              "helpUri": "https://docs.docker.com/network/packet-filtering-firewalls/",
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "docker",
+                  "CIS",
+                  "CIS-2.14"
+                ],
+                "security-severity": "3.0"
+              }
+            },
+            {
+              "id": "CIS-2.8",
+              "name": "CIS-2.8",
+              "shortDescription": {
+                "text": "User namespace remapping not enabled"
+              },
+              "fullDescription": {
+                "text": "User namespace remapping provides additional isolation by mapping container users to unprivileged host users."
+              },
+              "help": {
+                "text": "Configure --userns-remap in daemon.json for additional container isolation."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "docker"
+                ],
+                "security-severity": "1.0"
+              }
+            },
+            {
+              "id": "CIS-4.1",
+              "name": "CIS-4.1",
+              "shortDescription": {
+                "text": "Ensure that a user for the container has been created"
+              },
+              "fullDescription": {
+                "text": "Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container."
+              },
+              "help": {
+                "text": "Add USER instruction to Dockerfile: RUN useradd -r -u 1000 appuser && USER appuser"
+              },
+              "helpUri": "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "docker",
+                  "CIS",
+                  "CIS-4.1"
+                ],
+                "security-severity": "5.0"
+              }
+            },
+            {
+              "id": "CIS-4.6",
+              "name": "CIS-4.6",
+              "shortDescription": {
+                "text": "Ensure that HEALTHCHECK instructions have been added to container images"
+              },
+              "fullDescription": {
+                "text": "Health checks allow Docker to detect when containers become unresponsive and restart them automatically."
+              },
+              "help": {
+                "text": "Add HEALTHCHECK instruction to Dockerfile: HEALTHCHECK CMD curl -f http://localhost/ || exit 1"
+              },
+              "helpUri": "https://docs.docker.com/engine/reference/builder/#healthcheck",
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "docker",
+                  "CIS",
+                  "CIS-4.6"
+                ],
+                "security-severity": "3.0"
+              }
+            },
+            {
+              "id": "DS-IMG-PRIVPORT",
+              "name": "DS-IMG-PRIVPORT",
+              "shortDescription": {
+                "text": "Image exposes privileged ports: 80"
+              },
+              "fullDescription": {
+                "text": "Image exposes ports below 1024 which typically require root privileges."
+              },
+              "help": {
+                "text": "Consider using non-privileged ports (>1024) and mapping them at runtime if needed."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "docker"
+                ],
+                "security-severity": "1.0"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CIS-2.7",
+          "ruleIndex": 0,
+          "level": "warning",
+          "message": {
+            "text": "Seccomp not enabled on daemon: Docker daemon is not configured with seccomp support."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://daemon"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "3132d9aba4bae800e9fe46e68f7a38ca"
+          },
+          "properties": {
+            "security-severity": "5.0"
+          }
+        },
+        {
+          "ruleId": "CIS-2.14",
+          "ruleIndex": 1,
+          "level": "note",
+          "message": {
+            "text": "Ensure Userland Proxy is Disabled: The userland proxy is slower than hairpin NAT mode and not needed in most environments."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://daemon"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "0da6a897467dd30c86f7290fc15dcd4d"
+          },
+          "properties": {
+            "security-severity": "3.0"
+          }
+        },
+        {
+          "ruleId": "CIS-2.8",
+          "ruleIndex": 2,
+          "level": "note",
+          "message": {
+            "text": "User namespace remapping not enabled: User namespace remapping provides additional isolation by mapping container users to unprivileged host users."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://daemon"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "5181e29f6a0b0b1e0a9959d0e69110ab"
+          },
+          "properties": {
+            "security-severity": "1.0"
+          }
+        },
+        {
+          "ruleId": "CIS-4.1",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "Ensure that a user for the container has been created: Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://image/nginx:latest"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "be993b7c9a7d04b8ded3efb80db2fa20"
+          },
+          "properties": {
+            "security-severity": "5.0"
+          }
+        },
+        {
+          "ruleId": "CIS-4.6",
+          "ruleIndex": 4,
+          "level": "note",
+          "message": {
+            "text": "Ensure that HEALTHCHECK instructions have been added to container images: Health checks allow Docker to detect when containers become unresponsive and restart them automatically."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://image/nginx:latest"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "1e655e368ea47396cd44eb17c0e6b01c"
+          },
+          "properties": {
+            "security-severity": "3.0"
+          }
+        },
+        {
+          "ruleId": "DS-IMG-PRIVPORT",
+          "ruleIndex": 5,
+          "level": "note",
+          "message": {
+            "text": "Image exposes privileged ports: 80: Image exposes ports below 1024 which typically require root privileges."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://image/nginx:latest"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "ee529f7f01d3fd63ce5d46da9feaa3d6"
+          },
+          "properties": {
+            "security-severity": "1.0"
+          }
+        },
+        {
+          "ruleId": "CIS-4.1",
+          "ruleIndex": 3,
+          "level": "warning",
+          "message": {
+            "text": "Ensure that a user for the container has been created: Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://image/redis:latest"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "79dd772a386275346585f7abe071884b"
+          },
+          "properties": {
+            "security-severity": "5.0"
+          }
+        },
+        {
+          "ruleId": "CIS-4.6",
+          "ruleIndex": 4,
+          "level": "note",
+          "message": {
+            "text": "Ensure that HEALTHCHECK instructions have been added to container images: Health checks allow Docker to detect when containers become unresponsive and restart them automatically."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker://image/redis:latest"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "fd249d3ddc39ea16f512ba945f1e10b1"
+          },
+          "properties": {
+            "security-severity": "3.0"
+          }
+        }
+      ],
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "endTimeUtc": "2026-07-17T22:58:21Z"
+        }
+      ]
+    }
+  ]
+}

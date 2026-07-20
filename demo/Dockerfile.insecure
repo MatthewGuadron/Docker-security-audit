@@ -1,0 +1,5 @@
+FROM ubuntu:latest
+USER root
+ENV API_KEY=AKIA1234567890ABCDEF
+RUN apt-get update
+CMD ["sleep", "3600"]

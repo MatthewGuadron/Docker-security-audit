@@ -1,0 +1,200 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2026-07-18T00:50:10Z",
+  "summary": {
+    "total": 8,
+    "by_severity": {
+      "INFO": 2,
+      "LOW": 3,
+      "MEDIUM": 3
+    }
+  },
+  "findings": [
+    {
+      "id": "3845edcf396b9ed4",
+      "rule_id": "CIS-2.7",
+      "title": "Seccomp not enabled on daemon",
+      "description": "Docker daemon is not configured with seccomp support.",
+      "severity": "MEDIUM",
+      "category": "Docker Daemon Configuration",
+      "target": {
+        "type": "daemon",
+        "name": "docker-daemon",
+        "id": "adc3dd91-f3a7-4d73-b6c0-79ff2276f185"
+      },
+      "remediation": "Set appropriate ulimits: dockerd --default-ulimit nproc=1024:2048 --default-ulimit nofile=100:200",
+      "references": [
+        "https://docs.docker.com/engine/reference/commandline/dockerd/#default-ulimit-settings"
+      ],
+      "cis_control": {
+        "id": "2.7",
+        "section": "Docker Daemon Configuration",
+        "title": "Ensure the default ulimit is configured appropriately",
+        "description": "Default ulimits control resource usage for containers. Proper limits prevent resource exhaustion attacks.",
+        "scored": false,
+        "level": 1
+      },
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "468c44d019aa023a",
+      "rule_id": "CIS-2.14",
+      "title": "Ensure Userland Proxy is Disabled",
+      "description": "The userland proxy is slower than hairpin NAT mode and not needed in most environments.",
+      "severity": "LOW",
+      "category": "Docker Daemon Configuration",
+      "target": {
+        "type": "daemon",
+        "name": "docker-daemon",
+        "id": "adc3dd91-f3a7-4d73-b6c0-79ff2276f185"
+      },
+      "remediation": "Disable userland proxy: dockerd --userland-proxy=false or set userland-proxy: false in daemon.json.",
+      "references": [
+        "https://docs.docker.com/network/packet-filtering-firewalls/"
+      ],
+      "cis_control": {
+        "id": "2.14",
+        "section": "Docker Daemon Configuration",
+        "title": "Ensure Userland Proxy is Disabled",
+        "description": "The userland proxy is slower than hairpin NAT mode and not needed in most environments.",
+        "scored": false,
+        "level": 1
+      },
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "3b2aef8ae13e7af1",
+      "rule_id": "CIS-2.8",
+      "title": "User namespace remapping not enabled",
+      "description": "User namespace remapping provides additional isolation by mapping container users to unprivileged host users.",
+      "severity": "INFO",
+      "category": "Docker Daemon Configuration",
+      "target": {
+        "type": "daemon",
+        "name": "docker-daemon",
+        "id": "adc3dd91-f3a7-4d73-b6c0-79ff2276f185"
+      },
+      "remediation": "Configure --userns-remap in daemon.json for additional container isolation.",
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "d148c34dfa806053",
+      "rule_id": "CIS-4.1",
+      "title": "Ensure that a user for the container has been created",
+      "description": "Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container.",
+      "severity": "MEDIUM",
+      "category": "Container Images and Build Files",
+      "target": {
+        "type": "image",
+        "name": "nginx:latest",
+        "id": "sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942"
+      },
+      "remediation": "Add USER instruction to Dockerfile: RUN useradd -r -u 1000 appuser && USER appuser",
+      "references": [
+        "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user"
+      ],
+      "cis_control": {
+        "id": "4.1",
+        "section": "Container Images and Build Files",
+        "title": "Ensure that a user for the container has been created",
+        "description": "Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container.",
+        "scored": true,
+        "level": 1
+      },
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "71cc951859ae1722",
+      "rule_id": "CIS-4.6",
+      "title": "Ensure that HEALTHCHECK instructions have been added to container images",
+      "description": "Health checks allow Docker to detect when containers become unresponsive and restart them automatically.",
+      "severity": "LOW",
+      "category": "Container Images and Build Files",
+      "target": {
+        "type": "image",
+        "name": "nginx:latest",
+        "id": "sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942"
+      },
+      "remediation": "Add HEALTHCHECK instruction to Dockerfile: HEALTHCHECK CMD curl -f http://localhost/ || exit 1",
+      "references": [
+        "https://docs.docker.com/engine/reference/builder/#healthcheck"
+      ],
+      "cis_control": {
+        "id": "4.6",
+        "section": "Container Images and Build Files",
+        "title": "Ensure that HEALTHCHECK instructions have been added to container images",
+        "description": "Health checks allow Docker to detect when containers become unresponsive and restart them automatically.",
+        "scored": true,
+        "level": 1
+      },
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "cbdf0b0bbeb4891f",
+      "rule_id": "DS-IMG-PRIVPORT",
+      "title": "Image exposes privileged ports: 80",
+      "description": "Image exposes ports below 1024 which typically require root privileges.",
+      "severity": "INFO",
+      "category": "Container Images and Build Files",
+      "target": {
+        "type": "image",
+        "name": "nginx:latest",
+        "id": "sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942"
+      },
+      "remediation": "Consider using non-privileged ports (>1024) and mapping them at runtime if needed.",
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "f4562107a19cc9cb",
+      "rule_id": "CIS-4.1",
+      "title": "Ensure that a user for the container has been created",
+      "description": "Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container.",
+      "severity": "MEDIUM",
+      "category": "Container Images and Build Files",
+      "target": {
+        "type": "image",
+        "name": "redis:latest",
+        "id": "sha256:234c902a2db49461a129e2d4aeff85b28cf20187ed274a67f6e50995fa713c7b"
+      },
+      "remediation": "Add USER instruction to Dockerfile: RUN useradd -r -u 1000 appuser && USER appuser",
+      "references": [
+        "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user"
+      ],
+      "cis_control": {
+        "id": "4.1",
+        "section": "Container Images and Build Files",
+        "title": "Ensure that a user for the container has been created",
+        "description": "Running containers as root increases the risk of container escape and host compromise. A dedicated non-root user should be created for the container.",
+        "scored": true,
+        "level": 1
+      },
+      "timestamp": "2026-07-18T00:50:10Z"
+    },
+    {
+      "id": "9b1cbde7d29e4449",
+      "rule_id": "CIS-4.6",
+      "title": "Ensure that HEALTHCHECK instructions have been added to container images",
+      "description": "Health checks allow Docker to detect when containers become unresponsive and restart them automatically.",
+      "severity": "LOW",
+      "category": "Container Images and Build Files",
+      "target": {
+        "type": "image",
+        "name": "redis:latest",
+        "id": "sha256:234c902a2db49461a129e2d4aeff85b28cf20187ed274a67f6e50995fa713c7b"
+      },
+      "remediation": "Add HEALTHCHECK instruction to Dockerfile: HEALTHCHECK CMD curl -f http://localhost/ || exit 1",
+      "references": [
+        "https://docs.docker.com/engine/reference/builder/#healthcheck"
+      ],
+      "cis_control": {
+        "id": "4.6",
+        "section": "Container Images and Build Files",
+        "title": "Ensure that HEALTHCHECK instructions have been added to container images",
+        "description": "Health checks allow Docker to detect when containers become unresponsive and restart them automatically.",
+        "scored": true,
+        "level": 1
+      },
+      "timestamp": "2026-07-18T00:50:10Z"
+    }
+  ]
+}
