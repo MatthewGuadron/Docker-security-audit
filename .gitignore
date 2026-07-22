@@ -10,3 +10,5 @@ bin/
 # IDE stuff
 .vscode/
 .idea/
+
+/docksec
